@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +30,9 @@ public class EventController {
         Optional<EventResponse> result =
                 eventService.getEventById(id);
 
-        return result.map(ResponseEntity::ok).orElseGet(
-                () -> ResponseEntity.notFound().build()
-        );
+        return result
+                .map(ResponseEntity::ok)
+                .orElseGet( () -> ResponseEntity.notFound().build() );
 
     }
 }
