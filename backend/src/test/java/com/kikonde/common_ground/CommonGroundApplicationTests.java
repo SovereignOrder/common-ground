@@ -1,0 +1,13 @@
+package com.kikonde.common_ground;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class CommonGroundApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
