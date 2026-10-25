@@ -1,5 +1,6 @@
 package com.kikonde.common_ground;
 
+import java.util.Optional;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,14 @@ public class EventService {
                         10
                 )
         );
+    }
+    public Optional<EventResponse> getEventById(long id) {
+        for (EventResponse event : getEvents()) {
+            if (event.id() == id) {
+                return Optional.of(event);
+            }
+        }
+
+        return Optional.empty();
     }
 }
