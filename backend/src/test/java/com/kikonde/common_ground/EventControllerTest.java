@@ -1,5 +1,10 @@
 package com.kikonde.common_ground;
 
+import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +23,37 @@ class EventControllerTest {
 
     @BeforeEach
     void setUp() {
-        EventService service = new EventService();
+        EventService service = mock(EventService.class);
+
+        EventResponse requestedEvent = new EventResponse(
+                2L,
+                "Chess and Coffee",
+                "Oakville",
+                8
+        );
+
+        when(service.getEvents()).thenReturn(List.of(
+                new EventResponse(
+                        1L,
+                        "Beach Volleyball",
+                        "Burlington",
+                        20
+                ),
+                requestedEvent,
+                new EventResponse(
+                        3L,
+                        "Group Walk",
+                        "Burlington",
+                        10
+                )
+        ));
+
+        when(service.getEventById(2L))
+                .thenReturn(Optional.of(requestedEvent));
+
+        when(service.getEventById(999L))
+                .thenReturn(Optional.empty());
+
         EventController controller = new EventController(service);
 
         mockMvc = MockMvcBuilders
