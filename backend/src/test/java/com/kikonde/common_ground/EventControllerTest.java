@@ -16,14 +16,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 class EventControllerTest {
 
     private MockMvc mockMvc;
+    private EventService service;
 
     @BeforeEach
     void setUp() {
-        EventService service = mock(EventService.class);
+        service = mock(EventService.class);
 
         EventResponse requestedEvent = new EventResponse(
                 2L,
@@ -83,5 +86,23 @@ class EventControllerTest {
         mockMvc.perform(get("/api/events/999"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    void rejectsZeroCapacity() throws Exception {
+        String requestBody = """
+        {
+          "title": "Rejected Capacity Check",
+          "location": "Burlington",
+          "capacity": 0
+        }
+        """;
+
+        mockMvc.perform(post("/api/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(service);
     }
 }
