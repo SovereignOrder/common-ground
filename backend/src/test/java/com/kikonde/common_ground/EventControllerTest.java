@@ -105,4 +105,21 @@ class EventControllerTest {
 
         verifyNoInteractions(service);
     }
+
+    @Test
+    void rejectsMissingCapacity() throws Exception {
+        String requestBody = """
+        {
+          "title": "Missing Capacity Check",
+          "location": "Burlington"
+        }
+        """;
+
+        mockMvc.perform(post("/api/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(service);
+    }
 }
